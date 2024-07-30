@@ -7,7 +7,10 @@ RUN apk add --no-cache \
     curl \
     gcc \
     musl-dev \
-    openssl
+    openssl \
+    build-essential \
+    cmake \
+    pkg-config
 
 # Install Rust toolchain
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -18,16 +21,16 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN rustup target add wasm32-unknown-unknown
 
 # Install Stellar CLI from source
-RUN /root/.cargo/bin/cargo install --locked stellar-cli --features opt
+RUN cargo install --locked stellar-cli --features opt
 
 # Configure Stellar CLI for testnet
-RUN /root/.cargo/bin/stellar network add \
+RUN stellar network add \
     --global testnet \
     --rpc-url https://soroban-testnet.stellar.org:443 \
     --network-passphrase "Test SDF Network ; September 2015"
 
 # Configure identity for Mark
-RUN /root/.cargo/bin/stellar keys generate --global mark --network testnet
+RUN stellar keys generate --global mark --network testnet
 
 # Change Workdir later
 WORKDIR /app
