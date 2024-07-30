@@ -1,16 +1,17 @@
 # Use Ubuntu 22.04 as the base image
-FROM alpine:3.15
+FROM ubuntu:22.04
 
 # Install dependencies
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     bash \
     curl \
     gcc \
-    musl-dev \
-    openssl \
+    g++ \
+    libssl-dev \
     build-essential \
     cmake \
-    pkg-config
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Rust toolchain
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
