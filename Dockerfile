@@ -33,8 +33,8 @@ RUN cargo install --locked stellar-cli
 # Configure Stellar CLI for testnet
 RUN stellar-cli config network testnet
 
-# Configure identity (example: set a placeholder identity)
-RUN echo "[[identity]]\nname = \"example-identity\"\n" > ~/.stellar/cli/config.toml
+# Configure identity (set a placeholder identity e.g. lavarius)
+RUN echo "[[lavarius]]\nname = \"lavarius\"\n" > ~/.stellar/cli/config.toml
 
 # Define the entrypoint
 ENTRYPOINT ["/bin/sh"]
