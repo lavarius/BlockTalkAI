@@ -20,7 +20,7 @@ Run the Docker container
 
 - `docker run -it my-stellar-app`
 
-Run with live changes (if in `/app`)
+'hot reloading': `-v $(pwd):/app` maps the current directory (`$(pwd)`) to the `/app` directory in the container, allowing for live updates. (Note: not sure how well this will work since any contract changes will likely need rebuilding, any other case like web UI changes or API endpoints will be live right away)
 
 - `docker run -d -p 5000:5000 -v $(pwd):/app my-stellar-app`
 
