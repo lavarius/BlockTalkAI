@@ -1,39 +1,25 @@
+# https://soroban.stellar.org/docs/reference/releases
+
 # Use Ubuntu 22.04 as the base image
 FROM ubuntu:22.04
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
-    bash \
-    curl \
-    gcc \
-    g++ \
-    libssl-dev \
-    build-essential \
-    cmake \
-    pkg-config \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y curl
 
-# Install Rust toolchain
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# Install Rust toolchain and output to shell file
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rust_install.sh
+
+RUN sh rust_install.sh -y
+RUN echo $PATH
 # Set environment variable for the PATH to include Cargo's bin directory
-ENV PATH="/root/.cargo/bin:${PATH}"
+ENV PATH="$PATH:/root/.cargo/bin"
 
 # Run Rustup target
 RUN rustup target add wasm32-unknown-unknown
 
-# Install Stellar CLI from source
-RUN cargo install --locked stellar-cli --features opt
+RUN apt install -y build-essential
 
-# Configure Stellar CLI for testnet
-RUN stellar network add \
-    --global testnet \
-    --rpc-url https://soroban-testnet.stellar.org:443 \
-    --network-passphrase "Test SDF Network ; September 2015"
-
-# Configure identity for Mark
-RUN stellar keys generate --global mark --network testnet
-
-# Change Workdir later
-WORKDIR /app
-
-CMD ["bash"]
+# WORKDIR /
+RUN mkdir /workspace
+WORKDIR /workspace
+ENV IS_USING_DOCKER=true
