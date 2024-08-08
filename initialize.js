@@ -48,8 +48,10 @@ function filenameNoExtension(filename) {
 }
 
 function deploy(wasm) {
-  exe(`${cli} contract deploy --wasm ${wasm} --ignore-checks --alias ${filenameNoExtension(wasm)}`);
+  const command = `${cli} contract deploy --wasm "${wasm}" --ignore-checks --alias ${filenameNoExtension(wasm)}`;
+  exe(command);
 }
+
 
 function deployAll() {
   const contractsDir = `${dirname}/.soroban/contract-ids`;
@@ -73,8 +75,11 @@ function contracts() {
 }
 
 function bind({alias, id}) {
-  exe(`${cli} contract bindings typescript --contract-id ${id} --output-dir ${dirname}/packages/${alias} --overwrite`);
+  const outputDir = `${dirname}/packages/${alias}`;
+  const command = `${cli} contract bindings typescript --contract-id ${id} --output-dir "${outputDir}" --overwrite`;
+  exe(command);
 }
+
 
 function bindAll() {
   contracts().forEach(bind);
